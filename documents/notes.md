@@ -170,21 +170,6 @@ All eight report `match: True   verified: True`.
 - **deletions** — all 8, each matching `predictedModel` and passing `satisfies`
 - **brute force** — `agrees` on all 512 clause sets over 2 atoms, and on `S₃` with its
   deletions
-
-```haskell
--- in tests/Main.hs, because it is the only thing that touches both sides
-agrees :: Int -> CNF -> Bool
-agrees n cnf = case solve cnf of
-  Satisfiable m -> satisfies m cnf && bruteForce n cnf
-  Unsatisfiable -> not (bruteForce n cnf)
-```
-
-The `Unsatisfiable` line is the important one — nothing else in the project can check an
-UNSAT answer.
-
-**Remember:** compare models with `sort`, since `Model` is newest-first and `completeModel`
-appends.
-
 ---
 
 ## 6. Decision counting — todo
