@@ -63,10 +63,10 @@ atomName 2 = "q"
 atomName 3 = "r"
 atomName a = "p" ++ show a
 
-showLiteral :: Literal -> String            -- "p"  /  "-p", note uses "¬p"
+showLiteral :: Literal -> String            -- "p"  / "¬p"
 showLiteral l
   | isPositive l = atomName l
-  | otherwise    = "-" ++ atomName (atom l)
+  | otherwise    = "¬" ++ atomName (atom l)
 
 showClause :: Clause -> String              -- "{p, q, ¬r}",  "□" when empty
 showClause c
