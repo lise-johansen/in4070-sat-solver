@@ -10,13 +10,14 @@ import           Test.Tasty.HUnit
 
 main :: IO ()
 main = defaultMain $ testGroup "DPLL"
-  [ simplifyTests, propagateTests, solveTests, assignmentTests, deletionTests ]
+  [ simplifyTests, propagateTests, solveTests, assignmentTests, deletionTests
+  , bruteForceTests ]
 
 -- {{p, q}, {¬p, q}, {p, ¬q}, {¬p, ¬q}} — lecture 9, slide 19
 slide19 :: CNF
 slide19 = map IS.fromList [[1, 2], [-1, 2], [1, -2], [-1, -2]]
 
--- §3.3: unit subsumption drops, unit resolution shortens
+-- Unit subsumption drops, unit resolution shortens
 simplifyTests :: TestTree
 simplifyTests = testGroup "simplify"
   [ testCase "drops clauses containing L, shortens those containing ¬L" $
@@ -27,7 +28,7 @@ simplifyTests = testGroup "simplify"
       map IS.toList (simplify 1 [IS.fromList [-1]]) @?= [[]]
   ]
 
--- §3.4: runs to a fixpoint, reports conflicts
+-- Runs to a fixpoint, reports conflicts
 propagateTests :: TestTree
 propagateTests = testGroup "propagate"
   [ testCase "one unit creates the next" $
@@ -39,7 +40,7 @@ propagateTests = testGroup "propagate"
       propagate slide19 [] @?= Just (slide19, [])
   ]
 
--- §1: the two empty objects, and §3.5 the cut
+-- The two empty objects, and the cut 
 solveTests :: TestTree
 solveTests = testGroup "solve"
   [ testCase "empty clause SET is satisfiable" $
@@ -54,7 +55,7 @@ solveTests = testGroup "solve"
         Satisfiable m -> sort (map atom m) @?= [1, 2]
   ]
 
--- the check the assignment text asks for
+-- The check the assignment text asks for
 assignmentTests :: TestTree
 assignmentTests = testGroup "assignment"
   [ testCase "all 8 clauses over 3 atoms is unsatisfiable" $
@@ -63,7 +64,7 @@ assignmentTests = testGroup "assignment"
       solve (allClauses 4) @?= Unsatisfiable
   ]
 
--- §5: deleting one clause leaves exactly one model
+-- Deleting one clause leaves exactly one model 
 deletionTests :: TestTree
 deletionTests = testGroup "S3 minus one clause"
   [ testCase ("without clause " ++ show i) $
@@ -75,4 +76,19 @@ deletionTests = testGroup "S3 minus one clause"
   | i <- [0 .. length s3 - 1]
   ]
   where s3 = allClauses 3
-  
+
+  -- | Does the solver agree with exhaustive search?
+agrees :: Int -> CNF -> Bool
+agrees n cnf = case solve cnf of
+  Satisfiable m -> satisfies m cnf && bruteForce n cnf
+  Unsatisfiable -> not (bruteForce n cnf)
+
+bruteForceTests :: TestTree
+bruteForceTests = testGroup "agreement with brute force"
+  [ testCase "all 512 clause sets over 2 atoms" $
+      assertBool "disagreement" (all (agrees 2) (clauseSetsOver 2))
+  , testCase "S3 and all its deletions" $
+      assertBool "disagreement" $
+        agrees 3 (allClauses 3)
+          && all (\i -> agrees 3 (deleteAt i (allClauses 3))) [0 .. 7]
+  ]

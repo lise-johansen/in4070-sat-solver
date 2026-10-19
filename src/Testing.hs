@@ -3,6 +3,24 @@ module Testing where
 import qualified Data.IntSet as IS
 import           Syntax
 
+import Control.Monad (filterM)
+
+-- | All 2ⁿ interpretations over atoms 1..n.
+allModels :: Int -> [Model]
+allModels n = sequence [[i, -i] | i <- [1 .. n]]
+
+-- | Ground truth by exhaustive search.  Slow, obviously correct.
+bruteForce :: Int -> CNF -> Bool
+bruteForce n cnf = any (`satisfies` cnf) (allModels n)
+
+-- | Every non-tautological clause over atoms 1..n (3ⁿ of them, including □).
+clausesOver :: Int -> [Clause]
+clausesOver n = map (IS.fromList . concat) (sequence [[[], [i], [-i]] | i <- [1 .. n]])
+
+-- | Every clause set built from those.
+clauseSetsOver :: Int -> [CNF]
+clauseSetsOver n = filterM (const [True, False]) (clausesOver n)
+
 -- | Sₙ: all 2ⁿ clauses over atoms 1..n.  sequence is the cartesian product.
 allClauses :: Int -> CNF
 allClauses n = map IS.fromList (sequence [[i, -i] | i <- [1 .. n]])
