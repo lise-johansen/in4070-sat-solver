@@ -1,0 +1,7 @@
+packages: .
+
+-- build the test suite too, so `cabal test` needs no extra flags
+tests: True
+
+-- -O2: timings from an unoptimised build are meaningless (notes.md, step 9)
+optimization: 2
