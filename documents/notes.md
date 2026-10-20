@@ -172,23 +172,8 @@ All eight report `match: True   verified: True`.
   deletions
 ---
 
-## 6. Decision counting — todo
 
-For the report. Decisions (cuts) are machine-independent; seconds are not.
-
-A second version of `dpll` that threads a counter.
-
-Haskell pitfalls:
-
-- Thread the counter explicitly (return `(Maybe Model, Int)`), or use `State Int (Maybe a)`.
-  **Not** `StateT Int Maybe`: when a branch fails, `Maybe` throws the state away, so the
-  count resets on every backtrack.
-- Make the counter strict (`let !n' = n + 1` with `BangPatterns`, or `$!`). Otherwise
-  millions of unevaluated `+1`s pile up and overflow the stack on large `n`.
-
----
-
-## 7. Measurements — todo
+## 6. Measurements — todo
 
 For the "how large can `n` get" part.
 
@@ -209,7 +194,7 @@ down, and the reason.
 
 ---
 
-## 8. The report (PDF) — todo
+## 7. The report (PDF) — todo
 
 1. **The calculus:** one-sided sequents, atomic cut (slide 18), simplification for clauses
    and unit propagation (slide 14). This is DPLL without pure literal elimination (slide 21).

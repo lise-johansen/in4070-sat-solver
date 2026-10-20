@@ -42,7 +42,6 @@ dpll cnf model = case propagate cnf model of
               <|> dpll (simplify (complement cutAtom) cnf') (complement cutAtom : model')
 
 
-
 -- the entry point
 solve :: CNF -> Result
 solve cnf = maybe Unsatisfiable (Satisfiable . completeModel (atomsOf cnf)) (dpll cnf [])

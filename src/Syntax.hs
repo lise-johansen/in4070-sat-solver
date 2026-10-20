@@ -29,10 +29,10 @@ isPositive = (> 0)
 isEmptyClause :: Clause -> Bool             -- □
 isEmptyClause = IS.null
 
-hasEmptyClause :: CNF -> Bool               -- □ ∈ S, the closing condition (§3.6)
+hasEmptyClause :: CNF -> Bool               -- □ ∈ S, the closing condition 
 hasEmptyClause = any isEmptyClause
 
-isSatisfied :: CNF -> Bool                  -- S = ∅, the open branch (§3.7)
+isSatisfied :: CNF -> Bool                  -- S = ∅, the open branch
 isSatisfied = null
 
 -- Find a unit clause if there is one
@@ -50,6 +50,8 @@ findUnit cs = IS.findMin <$> find isUnit cs
 -- The candidates for the cut
 atomsOf :: CNF -> [Atom]
 atomsOf = IS.toList . IS.map abs . IS.unions
+
+-- Decision counting 
 
 -- For printing
 completeModel :: [Atom] -> Model -> Model
