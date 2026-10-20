@@ -55,7 +55,7 @@ solveTests = testGroup "solve"
         Satisfiable m -> sort (map atom m) @?= [1, 2]
   ]
 
--- The check the assignment text asks for
+-- Check if the expected assignment is returned by the solver
 assignmentTests :: TestTree
 assignmentTests = testGroup "assignment"
   [ testCase "all 8 clauses over 3 atoms is unsatisfiable" $
