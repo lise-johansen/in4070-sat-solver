@@ -21,12 +21,15 @@ project folder loads it automatically (`.envrc` contains `use flake`).
 
 The first time, run `direnv allow` in the project folder. Without direnv, run `nix develop` instead.
 
-To run SAT-sovle (part 1 and part 2), from `./sat-solver`
+To run SAT-solver (part 1 and part 2), from `./sat-solver`
 
 ```
 cmd `cabal run`
-```
+
+
 `nix run` can also work.
+```
+
 
 ## The test suite (`tests/Main.hs`)
 
@@ -62,7 +65,7 @@ False
 
 ## Part 1: all 8 clauses over 3 atoms
 
-From `cabal run`. The program prints `¬p` as `-p`; this README uses `¬`.
+From `cabal run`.
 
 ```haskell
 {
