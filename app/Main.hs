@@ -62,7 +62,7 @@ showResult (Satisfiable m) = "SAT  " ++ showModel m
 --
 -- The memory cap is the RTS option -M, set to 8 GB (default) in sat-solver.cabal.
 -- Override default: cabal run sat-solver -- +RTS -M12g
--- Going over it makes GHC throw HeapOverflow, which is caught below, so the
+-- Going over it makes GHC throw HeapOverflow, so the program can stop gracefully.
 timeLimit :: Double
 timeLimit = 60
 
@@ -94,3 +94,6 @@ row n = do
   let seconds = fromIntegral (t1 - t0) / 1e12 :: Double
   printf "%4d  %10d  %10.3f   %s\n" n (length cnf) seconds (showResult result)
   pure seconds
+
+
+  -- User input
