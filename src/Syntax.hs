@@ -39,11 +39,6 @@ isSatisfied = null
 isUnit :: Clause -> Bool
 isUnit c = IS.size c == 1
 
-unitLit :: Clause -> Maybe Literal          -- {L} -> Just L
-unitLit c
-  | isUnit c  = Just (IS.findMin c)
-  | otherwise = Nothing
-
 findUnit :: CNF -> Maybe Literal
 findUnit cs = IS.findMin <$> find isUnit cs
 

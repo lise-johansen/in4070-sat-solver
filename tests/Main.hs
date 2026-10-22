@@ -77,7 +77,7 @@ deletionTests = testGroup "S3 minus one clause"
   ]
   where s3 = allClauses 3
 
-  -- | Does the solver agree with exhaustive search?
+  -- Does the solver agree with exhaustive search?
 agrees :: Int -> CNF -> Bool
 agrees n cnf = case solve cnf of
   Satisfiable m -> satisfies m cnf && bruteForce n cnf

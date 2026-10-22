@@ -1,7 +1,7 @@
 -- | DPLL SAT solver. Literals are non-zero Ints: n is a variable, -n its negation.
 module Solver where
 
-import Control.Applicative ((<|>)) -- <-- needed, not in Prelude
+import Control.Applicative ((<|>)) 
 import qualified Data.IntSet as IS
 import Syntax
 
@@ -24,8 +24,8 @@ propagate cnf model
       Nothing      -> Just (cnf, model)
       Just literal -> propagate (simplify literal cnf) (literal : model)
 
--- The atom to cut on: the smallest atom in the first clause.
--- Only called when no clause is empty and the clause set is not empty.
+-- Choose an atom to branch on. The heuristic is to pick the atom of the smallest literal in the first clause.
+-- Only called when no clause is empty and the clause set is not empty
 chooseAtom :: CNF -> Atom
 chooseAtom (clause : _) | not (isEmptyClause clause) = atom (IS.findMin clause)
 chooseAtom _ = error "chooseAtom: no atom left to cut on"
