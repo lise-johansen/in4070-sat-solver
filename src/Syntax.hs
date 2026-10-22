@@ -3,6 +3,7 @@ module Syntax where
 import           Data.IntSet (IntSet)
 import qualified Data.IntSet as IS
 import           Data.List   (find, intercalate, sortOn)
+import           Text.Read   (readMaybe)
 
 -- Data types
 type Atom    = Int          -- 1, 2, 3, …  never 0
@@ -85,3 +86,13 @@ showModel m = intercalate ", "
 
 braced :: [String] -> String
 braced xs = "{" ++ intercalate ", " xs ++ "}"
+
+-- Reading user input (used by app/Main.hs).
+-- One clause per line, literals as non-zero integers: "1 -2 3" is {p, ¬q, r}.
+-- Blank lines, comment lines ("c ...") and the "p cnf" header are skipped, and
+-- a trailing 0 is ignored.
+-- Nothing happens if the literal is not an (non-zero) integer.
+parseCNF :: String -> Maybe CNF
+parseCNF text = mapM parseClause [ws | ws@(w : _) <- map words (lines text), w `notElem` ["c", "p"]]
+  where
+    parseClause ws = IS.fromList . filter (/= 0) <$> mapM readMaybe ws
