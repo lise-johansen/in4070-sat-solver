@@ -1,0 +1,6 @@
+c Unit propagation alone finds the model
+c Expected: SAT, p = true, q = false
+1
+-2
+1 2 3
+-3 1

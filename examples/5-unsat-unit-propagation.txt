@@ -1,0 +1,6 @@
+c Unit propagation leads to a contradiction: p, then q, then r, but ¬r
+c Expected: UNSAT
+1
+-1 2
+-2 3
+-3

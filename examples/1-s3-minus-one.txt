@@ -1,0 +1,9 @@
+c S3 without {¬p, ¬q, ¬r}
+c Expected: SAT, p = true, q = true, r = true
+1 2 3
+1 2 -3
+1 -2 3
+1 -2 -3
+-1 2 3
+-1 2 -3
+-1 -2 3

@@ -1,0 +1,5 @@
+c Three of the four clauses over p and q
+c Expected: SAT, p = true, q = true
+1 2
+-1 2
+1 -2

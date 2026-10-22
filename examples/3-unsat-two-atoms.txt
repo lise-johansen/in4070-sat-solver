@@ -1,0 +1,6 @@
+c All four combinations of p and q are excluded
+c Expected: UNSAT
+1 2
+1 -2
+-1 2
+-1 -2
