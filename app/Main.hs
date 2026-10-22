@@ -12,12 +12,17 @@ import System.CPUTime    (getCPUTime)
 import System.IO         (hSetBuffering, stdout, BufferMode(LineBuffering))
 import Text.Printf       (printf)
 
+-- User input
+import System.Environment (getArgs)
+import System.Exit        (exitFailure)
+
 main :: IO ()
 main = do
   hSetBuffering stdout LineBuffering     -- print each row as soon as it is measured
-  checkN3
-  putStrLn ""
-  scaling
+  args <- getArgs
+  case args of
+    []    -> checkN3 >> putStrLn "" >> scaling    -- the assignment's two test cases
+    files -> solveFiles files                     -- user input: clauses from files
 
 -- Part 1: all 8 clauses over 3 atoms is UNSAT, and deleting any one
 -- clause makes it SAT.
@@ -96,4 +101,45 @@ row n = do
   pure seconds
 
 
-  -- User input
+-- User input: solve the clause set in each file (format: see parseCNF in
+-- src/Syntax.hs), then print a summary.
+-- The comment lines at the top of a file ("c ...") are shown as its description.
+solveFiles :: [FilePath] -> IO ()
+solveFiles files = do
+  results <- mapM solveFile files
+  let count r = length (filter (== Just r) (map (fmap isSat) results))
+      failed  = length (filter (== Nothing) results)
+  putStrLn (replicate 60 '═')
+  printf "%d file(s):  %d SAT,  %d UNSAT%s\n" (length files) (count True) (count False)
+    (if failed > 0 then printf ",  %d not readable" failed else "" :: String)
+  if failed > 0 then exitFailure else pure ()
+  where
+    isSat (Satisfiable _) = True
+    isSat Unsatisfiable   = False
+
+-- Solve one file and print it as a block.  Nothing if the file can't be parsed.
+solveFile :: FilePath -> IO (Maybe Result)
+solveFile file = do
+  text <- readFile file
+  putStrLn ("── " ++ file ++ " " ++ replicate (56 - length file) '─')
+  mapM_ (putStrLn . ("   " ++)) (description text)
+  case parseCNF text of
+    Nothing -> do
+      putStrLn "   error     every literal must be an integer"
+      putStrLn ""
+      pure Nothing
+    Just cnf -> do
+      let result = solve cnf
+      putStrLn ("   clauses   " ++ showCNF cnf)
+      case result of
+        Unsatisfiable -> putStrLn "   result    UNSAT"
+        Satisfiable m -> do
+          putStrLn "   result    SAT"
+          putStrLn ("   model     " ++ showModel m)
+      putStrLn ""
+      pure (Just result)
+
+-- The text of the comment lines at the top of a file.
+description :: String -> [String]
+description text = [unwords rest | ("c" : rest) <- takeWhile isComment (map words (lines text))]
+  where isComment ws = take 1 ws == ["c"]
