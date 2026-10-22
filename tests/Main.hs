@@ -11,7 +11,7 @@ import           Test.Tasty.HUnit
 main :: IO ()
 main = defaultMain $ testGroup "DPLL"
   [ simplifyTests, propagateTests, solveTests, assignmentTests, deletionTests
-  , bruteForceTests ]
+  , bruteForceTests, inputTests ]
 
 -- {{p, q}, {¬p, q}, {p, ¬q}, {¬p, ¬q}} — lecture 9, slide 19
 slide19 :: CNF
@@ -91,4 +91,23 @@ bruteForceTests = testGroup "agreement with brute force"
       assertBool "disagreement" $
         agrees 3 (allClauses 3)
           && all (\i -> agrees 3 (deleteAt i (allClauses 3))) [0 .. 7]
+  ]
+
+-- Reading clauses typed by the user (parseCNF in src/Syntax.hs)
+inputTests :: TestTree
+inputTests = testGroup "user input"
+  [ testCase "one clause per line, any number of literals" $
+      parseCNF "1 -2\n2 3 4 5\n-1\n" @?= Just (map IS.fromList [[1, -2], [2, 3, 4, 5], [-1]])
+  , testCase "blank lines are skipped" $
+      parseCNF "1\n\n   \n2\n" @?= Just (map IS.fromList [[1], [2]])
+  , testCase "DIMACS: comments, header and trailing 0" $
+      parseCNF "c a comment\np cnf 2 2\n1 -2 0\n2 0\n" @?= Just (map IS.fromList [[1, -2], [2]])
+  , testCase "empty input is the empty clause set" $
+      parseCNF "" @?= Just []
+  , testCase "a lone 0 is the empty clause" $
+      parseCNF "0\n" @?= Just [IS.empty]
+  , testCase "a literal that is not an integer is rejected" $
+      parseCNF "1 x\n" @?= Nothing
+  , testCase "parsed input is solved: slide 19 is UNSAT" $
+      fmap solve (parseCNF "1 2\n-1 2\n1 -2\n-1 -2\n") @?= Just Unsatisfiable
   ]
