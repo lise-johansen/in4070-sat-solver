@@ -35,7 +35,7 @@ nix run
 ## Solve your own clause set (user input)
 
 Write each clause set in its own file in the
-`examples/` folder has five ready examples:
+`examples/` folder has some examples:
 
 
 Run all of them, or only one:
