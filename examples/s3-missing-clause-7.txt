@@ -1,0 +1,9 @@
+c S3 without clause 7: {¬p, ¬q, r}
+c Expected: SAT, p = true, q = true, r = false
+1 2 3
+1 2 -3
+1 -2 3
+1 -2 -3
+-1 2 3
+-1 2 -3
+-1 -2 -3

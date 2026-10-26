@@ -1,0 +1,10 @@
+c S3: all 8 clauses over p, q, r
+c Expected: UNSAT
+1 2 3
+1 2 -3
+1 -2 3
+1 -2 -3
+-1 2 3
+-1 2 -3
+-1 -2 3
+-1 -2 -3
