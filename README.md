@@ -1,5 +1,5 @@
 # SAT Solver — IN4070 Oblig 3
-See more in [documents/notes.md](documents/notes.md).
+See more in [documents/notes.md](documents/notes.md). Find report in [documents/raport.pdf](documents/raport.pdf).
 
 ## Project layout
 
