@@ -49,7 +49,7 @@ src/Solver.hs --> simplify, propagate, chooseAtom, dpll, solve ← the calculus
 
 src/Testing.hs  --> allClauses, predictedModel, satisfies, bruteForce ← never imports Solver
 
-app/Main.hs  --> the assignment's n = 3 run, self-checking
+app/Main.hs  --> case 1, case 2, user input in form of .txt file. 
 
 tests/Main.hs  --> test suit 
 ```
@@ -78,14 +78,14 @@ Printed notation:
 
 ## TLDR;
 
-- [x] `□ ∈ S` means closed, `S = ∅` means SAT. Not swapped.
-- [x] Unit propagation runs to a fixpoint, not one pass.
-- [x] The interpretation gives a value to every atom of the input.
-- [x] Every SAT answer is checked by `satisfies`.
-- [x] `allClauses 3` is UNSAT; all 8 deletions are SAT with the predicted model.
-- [ ] UNSAT answers agree with brute force (`agrees` wired into the test suite).
-- [ ] Timings come from a `-O2` build of the compiled binary.
-- [ ] A table of `n`, clauses, decisions, time.
-- [ ] The report names the rules with their slides: atomic cut (18), simplification for
+- `□ ∈ S` means closed, `S = ∅` means SAT. Not swapped.
+- Unit propagation runs to a fixpoint, not one pass.
+- The interpretation gives a value to every atom of the input.
+- Every SAT answer is checked by `satisfies`.
+- `allClauses 3` is UNSAT; all 8 deletions are SAT with the predicted model.
+- UNSAT answers agree with brute force (`agrees` wired into the test suite).
+- Timings come from a `-O2` build of the compiled binary.
+- A table of `n`, clauses, decisions, time.
+- The report names the rules with their slides: atomic cut (18), simplification for
       clauses and unit propagation (14), Theorem 2.1 (11).
       
